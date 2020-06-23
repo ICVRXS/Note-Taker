@@ -1,6 +1,7 @@
 const fs = require("fs");
 const util = require("util");
 const path = require("path");
+const {v1: uuidv1} = require("uuid");
 
 const readFileAsync = util.promisify(fs.readFile);
 const writeFileAsync = util.promisify(fs.writeFile);
@@ -31,14 +32,17 @@ class Store {
 
     addNote(note){
         return this.getNotes().then((notes) => {
-            const newNote = {...note};
+            const newNote = {...note, id: uuidv1()};
             notes.push(newNote);
             return this.saveNotes(notes).then(() => newNote);
         });
     }
 
-    deleteNote(){
-
+    deleteNote(noteId){
+        return this.getNotes().then((notes) => {
+            const newList = notes.filter((note) => note.id !== noteId);
+            this.saveNotes(newList);
+        });
     }
 }
 
