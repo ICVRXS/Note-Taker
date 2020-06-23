@@ -1,16 +1,28 @@
 const router = require("express").Router();
-const path = require("path");
+const store = require("./../db/store.js");
 
+//Read Notes
 router.get("/notes", (req, res) => {
-    //TBD
+    store.getNotes().then((notes) => {
+        res.json(notes);
+    });
 });
 
+//Create Notes
 router.post("/notes", (req, res) => {
-    //TBD
+    store.addNote(req.body).then((note) => {
+        console.log(note);
+        res.json(note);
+    })
+    .catch((err) => {
+        if (err) throw err;
+    })
 });
 
 router.delete("/notes/:id", (req, res) => {
-    //TBD
+    store.deleteNote().then((notes) => {
+
+    });
 });
 
 module.exports = router;
